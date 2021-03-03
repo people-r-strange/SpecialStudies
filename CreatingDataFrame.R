@@ -87,3 +87,11 @@ str(filelist, give.attr=FALSE)
 ## I think it's fine to have these in a list since we'll probably want to lapply over each dataset using our TBA preprocessing function. Then we can rbind them all together before feeding it to PLS.
 ## Also, will at some point have to merge to the response value based on name of data file, so it's good that you are keeping that info around.
 ## Greg: double checking that these files all represent the same wavelength intervals
+
+## NIR is actually a matrix
+
+gasoline$NIR
+gasoline$NIR %>% dim()
+
+class(gasoline)
+class(gasoline$NIR)
