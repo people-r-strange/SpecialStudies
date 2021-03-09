@@ -57,9 +57,20 @@ library(foreign)
                   "NANDB-20.0.txt",
                   "SS.0.txt",
                   "WQ.0.txt")))
+## Greg, is it ok that these are technically public now?
+
+## can get these all automatically
+fname <- list.files("OPUS", full.names = T)
 
 ##List with all text files
 filelist <- lapply(fname, read.table)
+
+## if you don't want to manually change them all to .txt files
+## also I love a good lapply but might want to go tidy at some point
+## http://www.rebeccabarter.com/blog/2019-08-19_purrr/
+## https://sastoudt.github.io/blog/2018-08-15-adventures-in-tidyverse-purrr/
+
+filelist <- lapply(fname, read.delim, header = F)
 
 ##Check structure of filelist 
 str(filelist, give.attr = FALSE)
@@ -72,3 +83,15 @@ names(filelist) <- gsub(".*/(.*)\\..*", "\\1", fname)
 
 ##Check structure 
 str(filelist, give.attr=FALSE)
+
+## I think it's fine to have these in a list since we'll probably want to lapply over each dataset using our TBA preprocessing function. Then we can rbind them all together before feeding it to PLS.
+## Also, will at some point have to merge to the response value based on name of data file, so it's good that you are keeping that info around.
+## Greg: double checking that these files all represent the same wavelength intervals
+
+## NIR is actually a matrix
+
+gasoline$NIR
+gasoline$NIR %>% dim()
+
+class(gasoline)
+class(gasoline$NIR)
