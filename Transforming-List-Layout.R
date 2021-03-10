@@ -20,3 +20,7 @@ glimpse(filelist)
 
 ##Transform dataframe
 my_data <- do.call(rbind.data.frame, filelist)
+
+##figuring out names 
+colnames(my_data)
+
