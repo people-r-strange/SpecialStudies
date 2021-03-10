@@ -16,6 +16,12 @@ str(gasoline)
 glimpse(gasoline)
 View(gasoline)
 
+gasoline$NIR
+gasoline$NIR %>% dim()
+
+class(gasoline)
+class(gasoline$NIR)
+
 #Dividing gasoline data into training and testing sets
 gasTrain <- gasoline[1:50,]
 gasTest <- gasoline[51:60,]
@@ -83,3 +89,6 @@ RMSEP(gas1, newdata= gasTest)
 ##This will also prevent Z from being split into separate variables. Finally, one can use cbind to combine vectors and matrices into matrices on the fly in the formula. This is most useful for the response, e.g., cbind(y1, y2) ~ X.
 
 ##Variables in a data frame can be accessed with the $ operator, e.g., mydata$y. However, the pls functions access the variables automatically, so the user should never use $ in formulas.
+
+
+
