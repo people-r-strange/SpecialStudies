@@ -22,8 +22,12 @@ glimpse(filelist)
 
 
 ##Transform dataframe
+
+##test-branch-feedback
+
 # my_data <- do.call(rbind.data.frame, filelist) 
 ## this combines the datasets too soon, we need to reshape them first
+
 
 ## SAS attempt
 
@@ -49,3 +53,10 @@ newData <- do.call(rbind.data.frame,reformattedData)
 newData$dataset = names(filelist)
 
 dim(newData) ## should be 28 x 3698
+=======
+my_data <- do.call(rbind.data.frame, filelist)
+
+##figuring out names 
+colnames(my_data)
+
+##test-branch
