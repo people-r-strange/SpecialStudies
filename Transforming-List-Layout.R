@@ -38,7 +38,7 @@ filelist[[1]] %>% pivot_wider(names_from = V1, values_from = V2) %>% View()
 
 reformattedData <- lapply(filelist, function(x){pivot_wider(x, names_from = V1, values_from = V2)})
 
-lapply(reformattedData, ncol) %>% unlist() %>% summary() ## double check this is what we expect, all sould be the same
+lapply(reformattedData, ncol) %>% unlist() %>% summary() ## double check this is what we expect, all should be the same
 
 allNames <- lapply(reformattedData, names) %>% unlist()
 
@@ -53,8 +53,18 @@ newData <- do.call(rbind.data.frame,reformattedData)
 newData$dataset = names(filelist)
 
 dim(newData) ## should be 28 x 3698
-=======
-my_data <- do.call(rbind.data.frame, filelist)
+--------------------------------------------------------------------------------------------------
+library(tidyr)
+  
+#Trying the Transpose Function 
+df_new <- as.data.frame(t(filelist))
+  
+  
+  
+  
+  
+  
+  my_data <- do.call(rbind.data.frame, filelist)
 
 ##figuring out names 
 colnames(my_data)
