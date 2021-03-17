@@ -17,10 +17,6 @@ names(filelist) <- gsub(".*/(.*)\\..*", "\\1", fname)
 #assign name to our function, input df we want to function to work on
 transform_df <- function(filelist) {
   
-  #transforming dimensions of df from two columns to on long row (wavenumber becomes column header)
-  filelist[[1]] %>% pivot_wider(names_from = V1, values_from = V2) %>% dim()
-  filelist[[1]] %>% pivot_wider(names_from = V1, values_from = V2) %>% View()
-  
   #save the transformed df to a new list of df called reformattedData
   reformattedData <- lapply(filelist, function(x){pivot_wider(x, names_from = V1, values_from = V2)})
   
@@ -50,3 +46,5 @@ transform_df <- function(filelist) {
   
   return(newData)
 }
+
+transform_df(1)
