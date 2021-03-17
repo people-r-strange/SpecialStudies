@@ -32,12 +32,12 @@ transform_df <- function(filelist) {
   })
 
   # Unlist the reformattedData list into ?
-  allNames <- lapply(reformattedData, names) %>% unlist()
+  allNames <- lapply(reformattedData, names) 
+  allNames2 <- as.data.frame(do.call("rbind",allNames))
 
-  # create matrix with sample names in rows and wavenumber in columns, data in cells is absorbance values
-  allNames <- do.call("rbind", lapply(reformattedData, names))
 
-  allNames$dataset <- row.names(allNames) ## make this a specific column, don't trust it to store
+
+  allNames2$dataset <- row.names(allNames2) ## make this a specific column, don't trust it to store
 
 
   # creating new list of df where there aren't any wavenumbers...only absorbance values
@@ -54,7 +54,7 @@ transform_df <- function(filelist) {
   newData$dataset <- names(filelist)
 
   ## returning the waveNumberInfo too
-  return(list(newData = newData, waveNumberInfo = allNames))
+  return(list(newData = newData, waveNumberInfo = allNames2))
 }
 
 ## how you have it written expects filelist to be a list of datasets
