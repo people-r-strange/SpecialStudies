@@ -31,12 +31,14 @@ transform_df <- function(filelist) {
     pivot_wider(x, names_from = V1, values_from = V2)
   })
 
-  # Unlist the reformattedData list into ?
+  # Unlist the reformattedData list into matrix
   allNames <- lapply(reformattedData, names) 
+  
+  # convert matrix into dataframe
   allNames2 <- as.data.frame(do.call("rbind",allNames))
 
 
-
+  # add row names permanently
   allNames2$dataset <- row.names(allNames2) ## make this a specific column, don't trust it to store
 
   # creating new list of df where there aren't any wavenumbers...only absorbance values
