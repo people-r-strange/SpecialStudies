@@ -74,6 +74,10 @@ View(joined[,c("dataset.x","dataset.y")])
 remove <- c(2, 3, 9, 11, 12, 14, 15, 17, 44)
 
 joined2 = joined[-remove,]
+View(joined2[,c("dataset.x","dataset.y")]) ## have Greg check this
+
+write.csv(joined2[,c("dataset.x","dataset.y")], "toCheck.csv", row.names = F)
+
 
 dim(joined2) ## this is still not quite what I expect but much better
 
