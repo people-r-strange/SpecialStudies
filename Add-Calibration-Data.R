@@ -9,8 +9,12 @@ wet_chem_data <- read_csv("Coding-Ready-Wet-Chem-Data.csv")
 ##View(wet_chem_data)
 
 transformedData <- read_csv("transformedData.csv")
-##View(transformedData)
 
+#####test-branch-feedback
+
+## rearranging so dataset id is first, should do this in the transformating function instead moving forward
+transformedData <- cbind.data.frame(dataset = transformedData$dataset, transformedData[,-ncol(transformedData)]) 
+=======
 -------------#test-branch-feedback
 names(transformedData)[ncol(transformedData)] ## dataset name is already here, but lurking
 
@@ -18,9 +22,17 @@ names(transformedData)[ncol(transformedData)] ## dataset name is already here, b
 #Rename wet_chem_data columns 
 names(wet_chem_data)[1] <- "Sample"
 names(wet_chem_data)[2] <- "BSiPercent"
+#####test-branch
 
-#Read in Sample IDs
+head(names(transformedData))
+tail(names(transformedData))
 
+#####test-branch-feedback
+###test-branch
+#Rename wet_chem_data columns 
+names(wet_chem_data)[1] <- "dataset"
+names(wet_chem_data)[2] <- "BSiPercent"
+=======
 fname <- list.files("OPUS", full.names = T) ## read in txt files automatically 
 
 ------------#test-branch-feedback
@@ -42,63 +54,87 @@ Sample <- names(filelist) #saving names as vector
 
 -------------#test-branch-feedback
 transformedData <- cbind(Sample, transformedData) ## this works too, but it looks like we already put this step in the other function, so something to keep in mind when you function-ify this
+#####test-branch
 
 #bind calibration data to transformed data
-Complete_data <- full_join(wet_chem_data, transformedData, by = "Sample")
-## nice, I like how this keeps rows for missing data to remind us
+Complete_data <- full_join(wet_chem_data, transformedData, by = "dataset")
 
 dim(Complete_data) ## I would expect this to have the same number of rows as wet_chem_data
 dim(wet_chem_data)
 dim(transformedData)
 
-setdiff(wet_chem_data$Sample, transformedData$dataset) ## read "in wet_chem_data but not in transformedData"
+setdiff(wet_chem_data$dataset, transformedData$dataset) ## read "in wet_chem_data but not in transformedData"
 
-setdiff(transformedData$dataset, wet_chem_data$Sample) ## read "in transformedData but not in wet_chem_data"
+setdiff(transformedData$dataset, wet_chem_data$dataset) ## read "in transformedData but not in wet_chem_data"
 
 ## I wasn't expecting there to be anything in this (saying we don't have response data for these)
 
 ## if we look at the names, it looks like some decimal trimming might solve the issue if these are in fact the same
 
-transformedData$Sample = gsub("\\.0","",transformedData$dataset) ## this replaces .0 with a space, the backslashes escape the special character . in regular expressions
+#wet_chem_data$dataset
+#transformedData$dataset
 
-Complete_data <- full_join(wet_chem_data, transformedData, by = "Sample")
+
+
+transformedData$dataset = gsub("\\.0","",transformedData$dataset) ## this replaces .0 with a space, the backslashes escape the special character . in regular expressions
+
+transformedData$dataset = gsub("cm","",transformedData$dataset) ## this replaces .0 with a space, the backslashes escape the special character . in regular expressions
+
+
+Complete_data <- full_join(wet_chem_data, transformedData, by = "dataset")
 dim(Complete_data)
 
-setdiff(wet_chem_data$Sample, transformedData$Sample) ## read "in wet_chem_data but not in transformedData"
+setdiff(wet_chem_data$dataset, transformedData$dataset) ## read "in wet_chem_data but not in transformedData"
 
-setdiff(transformedData$Sample, wet_chem_data$Sample) ## read "in transformedData but not in wet_chem_data"
+setdiff(transformedData$dataset, wet_chem_data$dataset) ## read "in transformedData but not in wet_chem_data"
 
 ## now it looks like the multiple replicates are what are giving us problems
 ## not sure what makes sense in context, let's talk to Greg about it
 
 ## only 10 of these are not NA though which is a bummer
-intersect(transformedData$Sample, wet_chem_data$Sample) ## wow ok, string matching is not our friend
+intersect(transformedData$dataset, wet_chem_data$dataset) ## wow ok, string matching is not our friend
 
 #install.packages("fuzzyjoin")
 library(fuzzyjoin)
 joined <- transformedData %>%
-  stringdist_inner_join(wet_chem_data, by = c(Sample = "Sample"), max_dist = 1)
+  stringdist_inner_join(wet_chem_data, by = c(dataset = "dataset"), max_dist = 1)
 # saying if the string is off by one, match them
 
 names(joined)[(ncol(joined)-3):ncol(joined)]
+names(joined)[1:5]
 
-View(joined[,c("dataset","Sample.y")])
+View(joined[,c("dataset.x","dataset.y")])
 ## these are extra based on visual inspection, double check me
-remove <- c(2, 3, 9, 11, 12, 17, 42)
+remove <- c(2, 3, 9, 11, 12, 14, 15, 17, 44)
 
 joined2 = joined[-remove,]
+View(joined2[,c("dataset.x","dataset.y")]) ## have Greg check this
+
+write.csv(joined2[,c("dataset.x","dataset.y")], "toCheck.csv", row.names = F)
+
 
 dim(joined2) ## this is still not quite what I expect but much better
 
-View(joined2[(ncol(joined)-5):ncol(joined)])
+head(names(joined2))
+tail(names(joined2))
 
-write.csv(joined2,"dataForProofOfConcept.csv",row.names=F) ## we can use this to try out PLS while we work out the string matching issues
+nice <- cbind.data.frame(BSiPercent = joined2$BSiPercent, joined2[2:(ncol(joined2)-2)])
 
+head(names(nice))
+tail(names(nice))
 
-## it might also be useful to provide an option to only end up with a dataset that matches what we actually have, it'll be a version of right_join
+write.csv(nice,"dataForProofOfConceptNice.csv",row.names=F) ## we can use this to try out PLS while we work out the string matching issues
 
-data_we_have <- right_join(wet_chem_data, transformedData, by = "Sample")
+setdiff(wet_chem_data$dataset, joined2$dataset.y)
+# missing these spectra
+#[1] "NANB3A1-126.5" "NANDB-10A"     "NANDB-10B"     "NANDB-31A"     "NANDB-31B"    
+#[6] "NANDB-31C"  
 
+##### test-branch-feedback
+setdiff( joined2$dataset.y, wet_chem_data$dataset) ## good
+
+transformedData$dataset
+=======
 dim(data_we_have)
 ---------#test-branch
 transformedData <- cbind(Sample, transformedData)
@@ -106,3 +142,4 @@ transformedData <- cbind(Sample, transformedData)
 #bind calibration data to transformed data
 Complete_data <- full_join(wet_chem_data, transformedData, by = "Sample")
 
+#####test-branch
