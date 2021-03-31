@@ -11,11 +11,10 @@ wet_chem_data <- read_csv("Coding-Ready-Wet-Chem-Data.csv")
 transformedData <- read_csv("transformedData.csv")
 ##View(transformedData)
 
-###test-branch-feedback
+-------------#test-branch-feedback
 names(transformedData)[ncol(transformedData)] ## dataset name is already here, but lurking
 
-=======
-###test-branch
+-------------#test-branch
 #Rename wet_chem_data columns 
 names(wet_chem_data)[1] <- "Sample"
 names(wet_chem_data)[2] <- "BSiPercent"
@@ -24,11 +23,11 @@ names(wet_chem_data)[2] <- "BSiPercent"
 
 fname <- list.files("OPUS", full.names = T) ## read in txt files automatically 
 
-####test-branch-feedback
+------------#test-branch-feedback
 
-=======
+
  
-###test-branch
+-------------#test-branch
 filelist <- lapply(fname, read.delim, header = F) ## creates list of txt files
 
 str(filelist, give.attr = FALSE) ##Check structure of filelist 
@@ -41,7 +40,7 @@ Sample <- names(filelist) #saving names as vector
 
 #Add new column to transformed df so we can join
 
-###test-branch-feedback
+-------------#test-branch-feedback
 transformedData <- cbind(Sample, transformedData) ## this works too, but it looks like we already put this step in the other function, so something to keep in mind when you function-ify this
 
 #bind calibration data to transformed data
@@ -101,9 +100,9 @@ write.csv(joined2,"dataForProofOfConcept.csv",row.names=F) ## we can use this to
 data_we_have <- right_join(wet_chem_data, transformedData, by = "Sample")
 
 dim(data_we_have)
-=======
+---------#test-branch
 transformedData <- cbind(Sample, transformedData)
 
 #bind calibration data to transformed data
 Complete_data <- full_join(wet_chem_data, transformedData, by = "Sample")
-####test-branch
+
