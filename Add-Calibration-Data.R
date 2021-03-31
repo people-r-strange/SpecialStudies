@@ -10,17 +10,51 @@ wet_chem_data <- read_csv("Coding-Ready-Wet-Chem-Data.csv")
 
 transformedData <- read_csv("transformedData.csv")
 
+#####test-branch-feedback
 
 ## rearranging so dataset id is first, should do this in the transformating function instead moving forward
 transformedData <- cbind.data.frame(dataset = transformedData$dataset, transformedData[,-ncol(transformedData)]) 
+=======
+-------------#test-branch-feedback
+names(transformedData)[ncol(transformedData)] ## dataset name is already here, but lurking
+
+-------------#test-branch
+#Rename wet_chem_data columns 
+names(wet_chem_data)[1] <- "Sample"
+names(wet_chem_data)[2] <- "BSiPercent"
+#####test-branch
 
 head(names(transformedData))
 tail(names(transformedData))
 
+#####test-branch-feedback
 ###test-branch
 #Rename wet_chem_data columns 
 names(wet_chem_data)[1] <- "dataset"
 names(wet_chem_data)[2] <- "BSiPercent"
+=======
+fname <- list.files("OPUS", full.names = T) ## read in txt files automatically 
+
+------------#test-branch-feedback
+
+
+ 
+-------------#test-branch
+filelist <- lapply(fname, read.delim, header = F) ## creates list of txt files
+
+str(filelist, give.attr = FALSE) ##Check structure of filelist 
+
+lapply(filelist, names) ##Checking Names (We need to rename...)
+
+names(filelist) <- gsub(".*/(.*)\\..*", "\\1", fname) ##Adding names of data frames to refer to each lake core 
+
+Sample <- names(filelist) #saving names as vector
+
+#Add new column to transformed df so we can join
+
+-------------#test-branch-feedback
+transformedData <- cbind(Sample, transformedData) ## this works too, but it looks like we already put this step in the other function, so something to keep in mind when you function-ify this
+#####test-branch
 
 #bind calibration data to transformed data
 Complete_data <- full_join(wet_chem_data, transformedData, by = "dataset")
@@ -96,6 +130,16 @@ setdiff(wet_chem_data$dataset, joined2$dataset.y)
 #[1] "NANB3A1-126.5" "NANDB-10A"     "NANDB-10B"     "NANDB-31A"     "NANDB-31B"    
 #[6] "NANDB-31C"  
 
+##### test-branch-feedback
 setdiff( joined2$dataset.y, wet_chem_data$dataset) ## good
 
 transformedData$dataset
+=======
+dim(data_we_have)
+---------#test-branch
+transformedData <- cbind(Sample, transformedData)
+
+#bind calibration data to transformed data
+Complete_data <- full_join(wet_chem_data, transformedData, by = "Sample")
+
+#####test-branch
