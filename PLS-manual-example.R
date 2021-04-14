@@ -59,16 +59,15 @@ plot(gas1, ncomp = 2, asp = 1, line = TRUE)
 #Scores plot 
 plot(gas1, plottype = "scores", comps = 1:3)
 
-##This gives pairwise plot of the score values for the three first components. Score plots are used to look for patterns, groups, or outliers. In this example, there is no indication of grouping or outliers. The numbers in parentheses are relative amount of X variance explained by each component 
-
 #Explained variance 
 explvar(gas1)
 
 #Loading plot 
-plot(gas1, "loadings", comps = 1:2, legenpos = 'topleft', labels = "numbers", xlab = "nm") 
+plot(gas1, "loadings", comps = 1:2, labels = "numbers", xlab = "nm") 
 
 abline(h=0)
 
+names(gas1)
 ##This plot is used for interpretation purposes, like looking for known spectral peaks or profiles
 
 #Predicting Response values of new observations 
