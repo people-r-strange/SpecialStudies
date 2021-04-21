@@ -166,7 +166,12 @@ names(pls1)
 ##Create data frame by binding CV and ncomps 
     #Why res$val[1,,] 
   data <- cbind.data.frame(cv = res$val[1,,], ncomps = 0:10)
-  ggplot(data, aes(ncomps, cv))+geom_point()+geom_line()
+  
+  ggplot(data, aes(ncomps, cv))+geom_point()+geom_line() + 
+    labs(title = "RMESP for pls2", 
+         subtitle="CV = 'LOO'",
+         y = "CV", 
+         x = "components") 
   
   
 
