@@ -10,18 +10,44 @@ pls1 <- plsr(BSiPercent~., ncomp = 10, data=data, validation = "LOO")
 
 names(pls1)
 
+### Check Class and Dim for all names ###
+
+##Coefficients
 pls1$coefficients %>% class() ## array
 pls1$coefficients %>% dim() ## 3697 1 10
 ## 3697 absorbances, 10 coefficients each (1 per component)
 
-
-pls1$scores %>% class()
+##Scores
+pls1$scores %>% class() ## scores
 pls1$scores %>% dim() ## 39 10
 ## 39 datasets, 10 components
 
-pls1$loadings %>% class()
+##Loadings
+pls1$loadings %>% class() ##loadings
 pls1$loadings %>% dim() ## 3697 10
 ## 3697 absorbances, 10 components
+
+##Loading.weights
+pls1$loading.weights %>% class() ##loads
+pls1$loading.weights %>% dim() ## 3697 10
+## 3697 absorbances, 10 components
+
+##Yscores
+pls1$Yscores %>% class() ##scores
+pls1$Yscores %>% dim() ## 39 10
+## 39 datasets, 10 components
+
+##YLoadings
+pls1$Yloadings %>% class() ##loadings
+pls1$Yloadings %>% dim() ## 1 10
+## What does the 1 refer to? , 10 components 
+
+##Projection
+pls1$projection %>% class() ## matrix array
+pls1$projection %>% dim() ## 3697 10
+## 3697 absorbances, 10 components 
+
+
 
 plot(pls1$loadings[,1])
 points(pls1$loading.weights[,1], col="red")
