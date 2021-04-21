@@ -160,11 +160,13 @@ names(pls1)
   res$cumulative %>% class() ##logical
 ##call
   res$call ## object = pls1
+------------------------------------------------------
+##Extracting what we want from pls1 to make our own loading plot 
   
-  
-  
-  
-  
+##Create data frame by binding CV and ncomps 
+    #Why res$val[1,,] 
+  data <- cbind.data.frame(cv = res$val[1,,], ncomps = 0:10)
+  ggplot(data, aes(ncomps, cv))+geom_point()+geom_line()
   
   
 
