@@ -1,11 +1,15 @@
 library(pls)
 library(tidyverse)
+library(scales)
 
+
+#Load in data 
 data <- read.csv("dataForProofOfConceptNice.csv")
 dim(data) ## 39 3698
 ## 39 datasets, 3697 absorbances, 1 response
 
-### PLS2 ###
+
+### Cross-Validation is 5-fold ###
 pls2 <- plsr(BSiPercent~., ncomp = 10, data=data, validation = "CV", segments = 5)
 summary(pls2)
 
@@ -14,9 +18,109 @@ plot(RMSEP(pls2))
 ## save root mean squared error of prediction to object res
 res2 <- RMSEP(pls2)
 
-data <- cbind.data.frame(cv = res2$val[1,,], ncomps = 0:10)
-ggplot(data, aes(ncomps, cv))+geom_point()+geom_line()+
-  labs(title = "RMSEP pls2", 
-       subtitle="CV= 5-fold",
-       y = "CV", 
-       x = "Components") 
+#Dataframe with cross validation and number of components
+Five_fold_CV <- cbind.data.frame(cv = res2$val[1,,], ncomps = 0:10)
+
+#Number of components graph 
+ggplot(Five_fold_CV, aes(ncomps, cv)) +
+  geom_line() +
+  labs(title = "Cross-validated RMSEP Curve", 
+       subtitle="CV is 5-fold",
+       y = "RMSEP", 
+       x = "Number of Components") +
+  scale_x_continuous(breaks = c(1:10)) + 
+  theme_minimal()
+-------------------------------------------------------------------------------------------------------------------
+## Load Opus txt file 
+# reading in list of txt files and converting it to a df
+
+## read in txt files automatically
+fname <- list.files("OPUS", full.names = T)
+
+## creates list of txt files
+filelist <- lapply(fname, read.delim, header = F)
+
+## Adding sample IDs (reference to lake core)
+names(filelist) <- gsub(".*/(.*)\\..*", "\\1", fname)
+
+# save the transformed df to a new list of df called reformattedData
+reformattedData <- lapply(filelist, function(x) {
+  pivot_wider(x, names_from = V1, values_from = V2)
+})
+
+# Unlist the reformattedData list into matrix
+allNames <- lapply(reformattedData, names) 
+
+# convert matrix into dataframe
+allNames2 <- as.data.frame(do.call("rbind",allNames))
+
+wavenumber <- as.numeric(as.vector(unname(t(allNames2[1,]))))
+
+
+#binding the two
+#cross_validated_errors <- cbind.data.frame(cv = res2$val[1,,], ncomps = 0:10)
+
+#Data frame for different loadings 
+#loadings, #first column of random opus txt file)
+testdata<- cbind.data.frame(loadings_1 = pls2$loadings[,1], 
+                            loadings_2= pls2$loadings[,2], 
+                            loadings_3 = pls2$loadings[,3], 
+                            weighted_loading_1 = pls2$loading.weights[,1], 
+                            weighted_loading_2 = pls2$loading.weights[,2], 
+                            weighted_loading_3 = pls2$loading.weights[,3], 
+                            wavenumber = wavenumber)
+
+#flip wavenumber axis (scales package)
+#ggplot(testdata, aes(x=wavenumber,y=loadings_1)) + 
+#  geom_point() +
+#  geom_point(aes(x=wavenumber, y = loadings_2), color = "red") + 
+#  geom_point(aes(x=wavenumber, y = loadings_3), color = "blue")
+
+## using weighted loadings for loading plot 
+
+#Loading plot for loading 1
+ggplot(testdata, aes(x=wavenumber,y=weighted_loading_1)) + 
+  geom_line () +
+  geom_line (aes(x=wavenumber, y = weighted_loading_2), color = "red") + 
+  geom_line (aes(x=wavenumber, y = weighted_loading_3), color = "blue") + 
+  
+  labs(title = "Loading Plot for Three Components",
+       y = "Weighted Loading", 
+       x = "Wavenumber (cm−1)") + 
+  scale_x_reverse() + 
+  theme_minimal()
+
+#Loading plot for loading 1 Pretty
+ggplot(testdata, aes(x=wavenumber)) + 
+  geom_line (aes(y = weighted_loading_1, colour = "1st Component")) +
+  geom_line (aes(y = weighted_loading_2, color = "2nd Component")) + 
+  geom_line (aes(y = weighted_loading_3, colour = "3rd Component")) + 
+  
+  scale_colour_manual("", 
+                      breaks = c("1st Component", "2nd Component", "3rd Component"),
+                      values = c("red", "green", "blue")) +
+  
+  labs(title = "Loading Plot for Three Components",
+       y = "Weighted Loading", 
+       x = "Wavenumber (cm−1)") + 
+  scale_x_reverse() + 
+  theme_minimal()
+
+#https://eigenvector.com/different-kinds-of-pls-weights-loadings-and-what-to-look-at/
+
+## R = W(P’W)-1
+## Answer: R is the same thing as weighted loading, so going to just use loading 
+
+testdata$Loading_1_R = as.vector(testdata$weighted_loading_1 %*% solve(t(testdata$loadings_1 ) %*% testdata$weighted_loading_1)) 
+
+ggplot(testdata, aes(x=wavenumber,y=loadings_1))  + geom_point() + 
+  geom_point(aes(x=wavenumber,y=weighted_loading_1), color = "blue") + 
+    geom_point(aes(x=wavenumber,y=Loading_1_R), color = "green")
+
+ggplot(testdata, aes(x = wavenumber, y = Loading_1_R)) + geom_point()
+
+png("testloadingplot.png")
+print(p)
+dev.off()
+  
+  
