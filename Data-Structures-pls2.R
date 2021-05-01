@@ -90,7 +90,11 @@ ggplot(testdata, aes(x=wavenumber,y=weighted_loading_1)) +
   scale_x_reverse() + 
   theme_minimal()
 
-#Loading plot for loading 1 Pretty
+#Loading plot for loading 1 with legend and vertical lines
+
+vline <- c("4000", "450")               # Define positions of vline
+vline <- which(testdata$wavenumber %in% vline)
+
 ggplot(testdata, aes(x=wavenumber)) + 
   geom_line (aes(y = weighted_loading_1, colour = "1st Component")) +
   geom_line (aes(y = weighted_loading_2, color = "2nd Component")) + 
@@ -98,11 +102,14 @@ ggplot(testdata, aes(x=wavenumber)) +
   
   scale_colour_manual("", 
                       breaks = c("1st Component", "2nd Component", "3rd Component"),
-                      values = c("red", "green", "blue")) +
+                      values = c("blue", "dark green", "orange")) +
   
-  labs(title = "Loading Plot for Three Components",
-       y = "Weighted Loading", 
-       x = "Wavenumber (cm−1)") + 
+  geom_vline(xintercept = 450) + 
+  geom_vline(xintercept = 4000) +
+  
+  labs(y="Weighted Loadings", 
+       x=expression(Wavenumber(cm^-1)), 
+       title='Loading Plot for Three Components') +
   scale_x_reverse() + 
   theme_minimal()
 
