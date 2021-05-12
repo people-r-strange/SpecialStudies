@@ -1,6 +1,8 @@
 library(pls)
 library(tidyverse)
 library(scales)
+library(plotly)
+library(readr)
 
 
 #Load in data 
@@ -70,32 +72,34 @@ testdata<- cbind.data.frame(loadings_1 = pls2$loadings[,1],
                             weighted_loading_3 = pls2$loading.weights[,3], 
                             wavenumber = wavenumber)
 
-#flip wavenumber axis (scales package)
-#ggplot(testdata, aes(x=wavenumber,y=loadings_1)) + 
-#  geom_point() +
-#  geom_point(aes(x=wavenumber, y = loadings_2), color = "red") + 
-#  geom_point(aes(x=wavenumber, y = loadings_3), color = "blue")
+#Export this data as csv
+write.csv(testdata, "testdata.csv")
 
+#Load in data 
+testdata <- read.csv("testdata.csv")
 ## using weighted loadings for loading plot 
 
 #Loading plot for loading 1
-ggplot(testdata, aes(x=wavenumber,y=weighted_loading_1)) + 
-  geom_line () +
-  geom_line (aes(x=wavenumber, y = weighted_loading_2), color = "red") + 
-  geom_line (aes(x=wavenumber, y = weighted_loading_3), color = "blue") + 
-  
-  labs(title = "Loading Plot for Three Components",
-       y = "Weighted Loading", 
-       x = "Wavenumber (cm−1)") + 
-  scale_x_reverse() + 
-  theme_minimal()
+# g<- ggplot(testdata, aes(x=wavenumber,y=weighted_loading_1)) + 
+#   geom_line () +
+#   geom_line (aes(x=wavenumber, y = weighted_loading_2), color = "red") + 
+#   geom_line (aes(x=wavenumber, y = weighted_loading_3), color = "blue") + 
+#   
+#   labs(title = "Loading Plot for Three Components",
+#        y = "Weighted Loading", 
+#        x = "Wavenumber (cm−1)") + 
+#   scale_x_reverse() + 
+#   theme_minimal()
+# g
+# 
+# ggplotly(g)
 
-#Loading plot for loading 1 with legend and vertical lines
+#Loading plot for Full Spectrum loading 1 with legend and vertical lines
 
-vline <- c("4000", "450")               # Define positions of vline
-vline <- which(testdata$wavenumber %in% vline)
+#vline <- c("4000", "450")               # Define positions of vline
+#vline <- which(testdata$wavenumber %in% vline)
 
-ggplot(testdata, aes(x=wavenumber)) + 
+  ggplot(testdata, aes(x=wavenumber)) + 
   geom_line (aes(y = weighted_loading_1, colour = "1st Component")) +
   geom_line (aes(y = weighted_loading_2, color = "2nd Component")) + 
   geom_line (aes(y = weighted_loading_3, colour = "3rd Component")) + 
@@ -104,14 +108,17 @@ ggplot(testdata, aes(x=wavenumber)) +
                       breaks = c("1st Component", "2nd Component", "3rd Component"),
                       values = c("blue", "dark green", "orange")) +
   
-  geom_vline(xintercept = 450) + 
-  geom_vline(xintercept = 4000) +
+  #geom_vline(xintercept = 450) + 
+  #geom_vline(xintercept = 4000) +
   
   labs(y="Weighted Loadings", 
        x=expression(Wavenumber(cm^-1)), 
-       title='Loading Plot for Three Components') +
+       title='Loading Plot for Three Components: Full Spectrum',
+       subtitle= expression("Where wavenumber ranges from ~7500 to ~370" ~ cm^{-1})) +
   scale_x_reverse() + 
   theme_minimal()
+
+
 
 #https://eigenvector.com/different-kinds-of-pls-weights-loadings-and-what-to-look-at/
 

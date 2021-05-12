@@ -55,7 +55,7 @@ names(pls1)
   pls1$residuals %>% dim() ## 39 1 10
 ------------------------------------------------------------
 ## 1 10 ##
-## 1 ??? , 10 components  
+## 1 (would be useful for multiple Ys but we only have one Y = BSiPercent) , 10 components  
   ##YLoadings
   pls1$Yloadings %>% class() ##loadings
   pls1$Yloadings %>% dim() ## 1 10
@@ -116,9 +116,9 @@ names(pls1)
 ##gammas
   pls1$validation$gammas ## NULL 
 ##PRESS0
-  pls1$validation$PRESS0 ## BSiPercent 1860.271  
+  pls1$validation$PRESS0 ## Predictive Residual Sum of Squares BSiPercent 1860.271  
 ##PRESS
-  pls1$validation$PRESS ## BSiPercent for 10 Components
+  pls1$validation$PRESS ## Predictive Residual Sum of Squares BSiPercent for 10 Components
 ##adj
   pls1$validation$adj ## BSiPercent for 10 components (smaller numbers)
   ## from help file for mvCv (sent to from plsr help file)
@@ -144,11 +144,11 @@ names(pls1)
   res$val %>% class() ## array
   res$val %>% dim() ## 2 x 1 x 11
   
-  res$val[1,,2] ## CV, one component
-  res$val[1,,11] ## CV, ten components
+  res$val[1,1,2] ## CV, one component
+  res$val[1,1,11] ## CV, ten components
   
-  res$val[2,,2] ## adjusted CV, one component
-  res$val[2,,11] ## adjustedCV, ten components
+  res$val[2,1,2] ## adjusted CV, one component
+  res$val[2,1,11] ## adjustedCV, ten components
 ##type
   res$type ## RMSEP
   res$type%>%class() ## character
