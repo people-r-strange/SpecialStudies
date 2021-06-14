@@ -16,35 +16,35 @@ names(transformedData)[ncol(transformedData)] ## dataset name is already here, b
 
 -------------#test-branch
 #Rename wet_chem_data columns 
-names(wet_chem_data)[1] <- "Sample"
+names(wet_chem_data)[1] <- "dataset"
 names(wet_chem_data)[2] <- "BSiPercent"
 
-#Read in Sample IDs
-
-fname <- list.files("OPUS", full.names = T) ## read in txt files automatically 
-
-------------#test-branch-feedback
-
-
- 
--------------#test-branch
-filelist <- lapply(fname, read.delim, header = F) ## creates list of txt files
-
-str(filelist, give.attr = FALSE) ##Check structure of filelist 
-
-lapply(filelist, names) ##Checking Names (We need to rename...)
-
-names(filelist) <- gsub(".*/(.*)\\..*", "\\1", fname) ##Adding names of data frames to refer to each lake core 
-
-Sample <- names(filelist) #saving names as vector
-
-#Add new column to transformed df so we can join
+# #Read in Sample IDs
+# 
+# fname <- list.files("OPUS", full.names = T) ## read in txt files automatically 
+# 
+# ------------#test-branch-feedback
+# 
+# 
+#  
+# -------------#test-branch
+# filelist <- lapply(fname, read.delim, header = F) ## creates list of txt files
+# 
+# str(filelist, give.attr = FALSE) ##Check structure of filelist 
+# 
+# lapply(filelist, names) ##Checking Names (We need to rename...)
+# 
+# names(filelist) <- gsub(".*/(.*)\\..*", "\\1", fname) ##Adding names of data frames to refer to each lake core 
+# 
+# Sample <- names(filelist) #saving names as vector
+# 
+# #Add new column to transformed df so we can join
 
 -------------#test-branch-feedback
 transformedData <- cbind(Sample, transformedData) ## this works too, but it looks like we already put this step in the other function, so something to keep in mind when you function-ify this
 
 #bind calibration data to transformed data
-Complete_data <- full_join(wet_chem_data, transformedData, by = "Sample")
+Complete_data <- full_join(wet_chem_data, transformedData, by = "dataset")
 ## nice, I like how this keeps rows for missing data to remind us
 
 dim(Complete_data) ## I would expect this to have the same number of rows as wet_chem_data
