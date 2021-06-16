@@ -3,7 +3,9 @@
 library(tidyverse)
 ----------------------------------------------------------------------------
   ## read in txt files automatically
-  fname <- list.files("OPUS", full.names = T)
+fname <- list.files("OPUS", full.names = T)
+----------------------------------------------------------------------------
+##FUNCTION 0: How would I write a function that Contains the following 3 functions (addSampleNames, dropNames, transform_df)?
   
   ##FUNCTION 1: Add Sample Names
   addSampleNames <- function(fname) {
@@ -58,6 +60,7 @@ library(tidyverse)
       ## returning the waveNumberInfo too
       return(list(newData = newData, waveNumberInfo = allNames2))
     }
+
   
   output <- transform_df(filelist)
   
