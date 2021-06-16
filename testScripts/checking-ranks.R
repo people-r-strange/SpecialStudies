@@ -8,7 +8,7 @@ library(Metrics)
 library(moderndive)
 
 #Load data
-actual_bsi <- read_csv("dataForProofOfConceptNice.csv")
+actual_bsi <- read_csv("csvFiles/dataForProofOfConceptNice.csv")
 dim(actual_bsi) # 39 3698
 names(actual_bsi)
 
