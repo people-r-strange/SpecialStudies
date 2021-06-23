@@ -6,7 +6,8 @@ library(readr)
 
 
 #Load in data 
-data <- read.csv("dataForProofOfConceptNice.csv")
+#data <- read.csv("csvFiles/dataForProofOfConceptNice.csv")
+data <- read_csv("csvFiles/resolvedSampleNames.csv")
 dim(data) ## 39 3698
 ## 39 datasets, 3697 absorbances, 1 response
 
@@ -74,10 +75,14 @@ testdata<- cbind.data.frame(loadings_1 = pls2$loadings[,1],
                             wavenumber = wavenumber)
 
 #Export this data as csv
-write.csv(testdata, "testdata.csv")
+#write.csv(testdata, "testdata.csv")
+
+#Export this data as csv
+write.csv(testdata, "testdata-2.csv")
 
 #Load in data 
-testdata <- read.csv("testdata.csv")
+#testdata <- read.csv("testdata.csv")
+testdata <- read_csv("csvFiles/testdata-2.csv")
 ## using weighted loadings for loading plot 
 
 #Loading plot for loading 1
@@ -114,8 +119,8 @@ testdata <- read.csv("testdata.csv")
   
   labs(y="Weighted Loadings", 
        x=expression(Wavenumber(cm^-1)), 
-       title='Loading Plot for Three Components: Full Spectrum',
-       subtitle= expression("Where wavenumber ranges from ~7500 to ~370" ~ cm^{-1})) +
+       title='Loading Plot for Three Components: Full Spectrum, n = 28',
+       subtitle= expression("Where wavenumber ranges from ~7500 to ~370" ~ cm^{-1}))+
   scale_x_reverse() + 
   theme_minimal()
   
