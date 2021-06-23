@@ -5,16 +5,21 @@ library(readr)
 library(dplyr)
 
 #read in calibration csv 
-wet_chem_data <- read_csv("Coding-Ready-Wet-Chem-Data.csv")
+#wet_chem_data <- read_csv("csvFiles/Coding-Ready-Wet-Chem-Data.csv")
 ##View(wet_chem_data)
 
-transformedData <- read_csv("transformedData.csv")
+#Read in calibration csv with same number of samples as our transformedData 
+wet_chem_data <- read_csv("csvFiles/resolved-sample-name.csv")
+
+transformedData <- read_csv("csvFiles/transformedData.csv")
 ##View(transformedData)
 
--------------#test-branch-feedback
-names(transformedData)[ncol(transformedData)] ## dataset name is already here, but lurking
+## dataset name is already here, but lurking
+names(transformedData)[ncol(transformedData)] 
 
--------------#test-branch
+## rearranging so dataset id is first, should do this in the transformating function instead moving forward
+transformedData <- cbind.data.frame(dataset = transformedData$dataset, transformedData[,-ncol(transformedData)]) 
+
 #Rename wet_chem_data columns 
 names(wet_chem_data)[1] <- "dataset"
 names(wet_chem_data)[2] <- "BSiPercent"
@@ -41,7 +46,7 @@ names(wet_chem_data)[2] <- "BSiPercent"
 # #Add new column to transformed df so we can join
 
 -------------#test-branch-feedback
-transformedData <- cbind(Sample, transformedData) ## this works too, but it looks like we already put this step in the other function, so something to keep in mind when you function-ify this
+#transformedData <- cbind(Sample, transformedData) ## this works too, but it looks like we already put this step in the other function, so something to keep in mind when you function-ify this
 
 #bind calibration data to transformed data
 Complete_data <- full_join(wet_chem_data, transformedData, by = "dataset")
@@ -59,9 +64,9 @@ setdiff(transformedData$dataset, wet_chem_data$Sample) ## read "in transformedDa
 
 ## if we look at the names, it looks like some decimal trimming might solve the issue if these are in fact the same
 
-transformedData$Sample = gsub("\\.0","",transformedData$dataset) ## this replaces .0 with a space, the backslashes escape the special character . in regular expressions
+transformedData$dataset = gsub("\\.0","",transformedData$dataset) ## this replaces .0 with a space, the backslashes escape the special character . in regular expressions
 
-Complete_data <- full_join(wet_chem_data, transformedData, by = "Sample")
+Complete_data <- full_join(wet_chem_data, transformedData, by = "dataset")
 dim(Complete_data)
 
 setdiff(wet_chem_data$Sample, transformedData$Sample) ## read "in wet_chem_data but not in transformedData"
