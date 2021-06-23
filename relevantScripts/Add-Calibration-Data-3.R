@@ -27,3 +27,9 @@ Complete_data$dataset = gsub("\\.0","",Complete_data$dataset)
 
 ## this replaces cm with a space, the backslashes escape the special character . in regular expressions
 Complete_data$dataset = gsub("cm","",Complete_data$dataset)
+
+##Remove sample names *can we keep sample names and run model on the data?*
+#Complete_data <- select(Complete_data,-dataset)
+
+#Write csv file 
+write.csv(Complete_data,"csvFiles/resolvedSampleNames-2.csv",row.names=F)
