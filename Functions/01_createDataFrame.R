@@ -7,6 +7,7 @@ fname <- list.files("OPUS", full.names = T)
 ----------------------------------------------------------------------------
 ##FUNCTION 0: How would I write a function that Contains the following 3 functions (addSampleNames, dropNames, transform_df)?
   
+  
   ##FUNCTION 1: Add Sample Names
   addSampleNames <- function(fname) {
   ## creates list of txt files
@@ -57,10 +58,24 @@ fname <- list.files("OPUS", full.names = T)
       ## adds column for each row to remind us which file it is
       newData$dataset <- names(filelist)
       
+      ## Make data sample name in first column
+      newData <- newData[,c(ncol(newData),1:(ncol(newData)-1))]
+      
+      allNames2 <- allNames2[,c(ncol(allNames2),1:(ncol(allNames2)-1))]
+      
       ## returning the waveNumberInfo too
       return(list(newData = newData, waveNumberInfo = allNames2))
     }
-
   
-  output <- transform_df(filelist)
+  
+ #output <- transform_df(filelist)
+  -----------------------------------------------------------
+  ## Big Function
+  runAll <- function(fname) {
+    sampleNames <- addSampleNames(fname)
+    listAbsorbanceWavenumber <- transform_df(sampleNames)
+    return(listAbsorbanceWavenumber)
+  }
+  
+  output <- runAll(fname)
   
