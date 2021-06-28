@@ -7,7 +7,7 @@ library(readr)
 
 #Load in data 
 #data <- read.csv("csvFiles/dataForProofOfConceptNice.csv")
-data <- read_csv("csvFiles/resolvedSampleNames.csv")
+data <- read_csv("csvFiles/resolvedSampleNames-2.csv")
 dim(data) ## 39 3698
 ## 39 datasets, 3697 absorbances, 1 response
 
