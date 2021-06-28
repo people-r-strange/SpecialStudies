@@ -1,6 +1,6 @@
 library(dplyr)
 
-waveNum <- read.csv("waveNumberInfoU.csv")
+waveNum <- read.csv("csvFiles/waveNumberInfoU.csv")
 
 dim(waveNum)
 names(waveNum)[ncol(waveNum)]
