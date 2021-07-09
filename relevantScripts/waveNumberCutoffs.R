@@ -48,3 +48,5 @@ searchWave(830, 1, waveNum) + 1 ## 3459
 ##Wavenumber 1050-1280
 searchWave(1050, 1, waveNum) ## 3344
 searchWave(1280, 1, waveNum) + 1 ## 3226
+# Truncated Dataset with three intervals 
+
