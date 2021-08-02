@@ -14,6 +14,7 @@ dim(data) ## 39 3698
 
 ### Cross-Validation is 5-fold ###
 pls2 <- plsr(BSiPercent~., ncomp = 10, data=data, validation = "CV", segments = 5)
+predict(pls2, ncomp = 1:10, newdata = data)
 summary(pls2)
 print(summary(pls2))
 
@@ -28,7 +29,7 @@ Five_fold_CV <- cbind.data.frame(cv = res2$val[1,,], ncomps = 0:10)
 #Number of components graph 
 ggplot(Five_fold_CV, aes(ncomps, cv)) +
   geom_line() +
-  labs(title = "Cross-validated Root Mean Squared Error of Prediction (RMSEP) Curve",
+  labs(title = "Cross-validated Root Mean Squared Error of Prediction (RMSEP) Curve", 
        subtitle="CV is 5-fold",
        y = "RMSEP", 
        x = "Number of Components") +
