@@ -1,14 +1,11 @@
-#Load relevant libraries
-
+#Load relevant libraries----
 library(tidyverse)
-----------------------------------------------------------------------------
-  ## read in txt files automatically
-fname <- list.files("OPUS", full.names = T)
-----------------------------------------------------------------------------
-##FUNCTION 0: How would I write a function that Contains the following 3 functions (addSampleNames, dropNames, transform_df)?
+
+## read in txt files automatically----
+fname <- list.files("OPUS", full.names = T) ###1:28
+
+##FUNCTION 1: Add Sample Names----
   
-  
-  ##FUNCTION 1: Add Sample Names
   addSampleNames <- function(fname) {
   ## creates list of txt files
   filelist <- lapply(fname, read.delim, header = F)
@@ -18,17 +15,16 @@ fname <- list.files("OPUS", full.names = T)
   
   return(filelist)
 }
-
   #Save list of txt files with sample names
-  filelist <- addSampleNames(fname)
-------------------------------------------------------------------------------
-  ##FUNCTION 2: Rename column header from "wavenumbers" to "Vi"
+  filelist <- addSampleNames(fname) ###28
+  
+##FUNCTION 2: Rename column header from "wavenumbers" to "Vi"----
+  
   dropNames <- function(data) {
     names(data) <- paste("V", 1:ncol(data), sep = "")
     return(data)
   }
-------------------------------------------------------------------------------
-    ##FUNCTION 3: Transforms the large list of dataframes [3697:2] into correct format [1:3697]
+##FUNCTION 3: Transforms the large list of dataframes [3697:2] into correct format [1:3697]----
     
     # assign name to our function, input list of dataframes we want function to work on (filelist)
     transform_df <- function(filelist) {
@@ -43,7 +39,6 @@ fname <- list.files("OPUS", full.names = T)
       
       # convert matrix into dataframe [28:3697]
       allNames2 <- as.data.frame(do.call("rbind",allNames))
-      
       
       # add row names permanently
       allNames2$dataset <- row.names(allNames2) ## make this a specific column, don't trust it to store
@@ -68,20 +63,19 @@ fname <- list.files("OPUS", full.names = T)
     }
   
   
- output <- transform_df(filelist)
+ output <- transform_df(filelist) ###1:28
   
   #write csv files 
   write.csv(output$newData, "transformedData.csv", row.names = F)
   write.csv(output$waveNumberInfo, "waveNumberInfo.csv", row.names = F)
   
-------------------------------------------------------------------
-    ##FUNCTION 4: Add Calibration Data 
-    
+##FUNCTION 4: Add Calibration Data ----
+  
     #Read in calibration csv with same number of samples as our transformedData 
-    wet_chem_data <- read_csv("csvFiles/resolved-sample-name.csv")
+    wet_chem_data <- read_csv("csvFiles/resolved-sample-name.csv") ###28
   
     #Read in absorbance values for each sample
-    transformedData <- read_csv("csvFiles/transformedData.csv")
+    transformedData <- read_csv("csvFiles/transformedData.csv") ###28:3698
     
     addWetChem <- function(transformedData) {
       ## Check if sample names are present 
@@ -106,7 +100,7 @@ fname <- list.files("OPUS", full.names = T)
       return(Complete_data)
     }
     
-    Data <- addWetChem(transformedData)
+    Data <- addWetChem(transformedData) ###28:3699
     
     #Write csv file 
     write.csv(Data,"csvFiles/resolvedSampleNames-2.csv",row.names=F)
@@ -121,8 +115,7 @@ fname <- list.files("OPUS", full.names = T)
     
     
     
-  -----------------------------------------------------------
-  ## Big Function
+## Big Function (Not completed) ----
   runAll <- function(fname) {
     sampleNames <- addSampleNames(fname)
     listAbsorbanceWavenumber <- transform_df(sampleNames)
