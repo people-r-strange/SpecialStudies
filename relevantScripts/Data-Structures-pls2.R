@@ -6,8 +6,10 @@ library(readr)
 
 
 #Load in data 
-#data <- read.csv("csvFiles/dataForProofOfConceptNice.csv")
-data <- read_csv("csvFiles/resolvedSampleNames-2.csv")
+data <- read.csv("csvFiles/dataForProofOfConceptNice.csv") ### 39 3698
+data <- read_csv("csvFiles/resolvedSampleNames-2.csv") ### 28 3699
+data <- data %>%
+  select(-1) ### 28 3698
 dim(data) ## 28 3699
 ## 39 datasets, 3697 absorbances, 1 response
 
@@ -59,7 +61,7 @@ allNames <- lapply(reformattedData, names)
 # convert matrix into dataframe
 allNames2 <- as.data.frame(do.call("rbind",allNames))
 
-wavenumber <- as.numeric(as.vector(unname(t(allNames2[1,]))))
+wavenumber <- as.numeric(as.vector(unname(t(allNames2[1,])))) ### 1:3697
 
 
 #binding the two
@@ -73,7 +75,7 @@ testdata<- cbind.data.frame(loadings_1 = pls2$loadings[,1],
                             weighted_loading_1 = pls2$loading.weights[,1], 
                             weighted_loading_2 = pls2$loading.weights[,2], 
                             weighted_loading_3 = pls2$loading.weights[,3], 
-                            wavenumber = wavenumber)
+                            wavenumber = wavenumber) ### 3697 7
 
 #Export this data as csv
 #write.csv(testdata, "testdata.csv")
