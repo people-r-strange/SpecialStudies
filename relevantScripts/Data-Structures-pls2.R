@@ -6,17 +6,14 @@ library(readr)
 
 
 #Load in data 
-data <- read.csv("csvFiles/dataForProofOfConceptNice.csv") ### 39 3698
-data <- read_csv("csvFiles/resolvedSampleNames-2.csv") ### 28 3699
-data <- data %>%
-  select(-1) ### 28 3698
-dim(data) ## 28 3699
+#data <- read.csv("csvFiles/dataForProofOfConceptNice.csv")
+data <- read_csv("csvFiles/resolvedSampleNames-2.csv")
+dim(data) ## 39 3698
 ## 39 datasets, 3697 absorbances, 1 response
 
 
 ### Cross-Validation is 5-fold ###
 pls2 <- plsr(BSiPercent~., ncomp = 10, data=data, validation = "CV", segments = 5)
-predict(pls2, ncomp = 1:10, newdata = data)
 summary(pls2)
 print(summary(pls2))
 
@@ -31,7 +28,7 @@ Five_fold_CV <- cbind.data.frame(cv = res2$val[1,,], ncomps = 0:10)
 #Number of components graph 
 ggplot(Five_fold_CV, aes(ncomps, cv)) +
   geom_line() +
-  labs(title = "Cross-validated Root Mean Squared Error of Prediction (RMSEP) Curve", 
+  labs(title = "Cross-validated Root Mean Squared Error of Prediction (RMSEP) Curve",
        subtitle="CV is 5-fold",
        y = "RMSEP", 
        x = "Number of Components") +
@@ -61,7 +58,7 @@ allNames <- lapply(reformattedData, names)
 # convert matrix into dataframe
 allNames2 <- as.data.frame(do.call("rbind",allNames))
 
-wavenumber <- as.numeric(as.vector(unname(t(allNames2[1,])))) ### 1:3697
+wavenumber <- as.numeric(as.vector(unname(t(allNames2[1,]))))
 
 
 #binding the two
@@ -75,7 +72,7 @@ testdata<- cbind.data.frame(loadings_1 = pls2$loadings[,1],
                             weighted_loading_1 = pls2$loading.weights[,1], 
                             weighted_loading_2 = pls2$loading.weights[,2], 
                             weighted_loading_3 = pls2$loading.weights[,3], 
-                            wavenumber = wavenumber) ### 3697 7
+                            wavenumber = wavenumber)
 
 #Export this data as csv
 #write.csv(testdata, "testdata.csv")
