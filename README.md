@@ -1,4 +1,4 @@
-# **A Partial Least Squares Calibration Model for Predicting Biogenic Silica**
+# **A Partial Least Squares Calibration Model for Predicting Biogenic Silica in Lake Sediment Cores in High Arctic Settings**
 
 ## I. Purpose
 
