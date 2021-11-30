@@ -28,13 +28,15 @@ data_trunc <- data %>%
 dim(data_trunc) #28 164
 
 #Rerun model 
-pls2 <- plsr(BSiPercent~., ncomp = 10, data=data[c(2,1946:3699)], validation = "CV", segments = 5)
+pls2 <- plsr(BSiPercent~., ncomp = 10, data=data, validation = "CV", segments = 5)
+
+pls2 <- plsr(BSiPercent~., ncomp = 10, data=data[c(2,3642:3664)], validation = "CV", segments = 5)
 
 pls2$fitted.values
 
 #Convert predicted BSi percents into data frame
 predicted_bsi <- as.data.frame(pls2$fitted.values)
-dim(predicted_bsi) 
+dim(predicted_bsi) #28 10
 
 #select model with 3 components
 predicted_bsi_3 <- as.data.frame(predicted_bsi[,c(3)])
@@ -89,6 +91,11 @@ round_df <- function(x, digits) {
 }
 
 Difference <- round_df(Difference, 2)
+
+Abs <- (abs(Difference$Difference))
+
+mean(Abs) 
+median(Abs)
 
 #Visually Represent difference 
 Difference %>% 
