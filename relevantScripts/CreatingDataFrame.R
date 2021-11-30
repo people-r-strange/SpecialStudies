@@ -60,10 +60,10 @@ library(foreign)
 ## Greg, is it ok that these are technically public now?
 
 ## can get these all automatically
-fname <- list.files("OPUS", full.names = T)
+fname <- list.files("Alaska100", full.names = T)
 
 ##List with all text files
-filelist <- lapply(fname, read.table)
+filelist <- lapply(fname, read.table, sep=",")
 
 ## if you don't want to manually change them all to .txt files
 ## also I love a good lapply but might want to go tidy at some point
